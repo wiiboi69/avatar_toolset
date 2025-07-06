@@ -1,3 +1,5 @@
+using Newtonsoft.Json;
+
 namespace avatar_toolset
 {
     public partial class Form1 : Form
@@ -54,5 +56,68 @@ namespace avatar_toolset
         {
             textBox1.Text = $"{comboBox1.Text},{comboBox2.Text},{comboBox3.Text},{comboBox4.Text}";
         }
+
+        private void randoimize_Click(object sender, EventArgs e)
+        {
+            string path = openFileDialog1.FileName;
+ 
+            try
+            {
+                string newFilePath = Path.Combine(Environment.CurrentDirectory, "randomized_output.json");
+
+                List<avatar_parcer.avatar_item_extended> randomizedItems = new List<avatar_parcer.avatar_item_extended>();
+
+                if (File.Exists(newFilePath))
+                {
+                    string existingJson = File.ReadAllText(newFilePath);
+                    randomizedItems = JsonConvert.DeserializeObject<List<avatar_parcer.avatar_item_extended>>(existingJson)
+                                      ?? new List<avatar_parcer.avatar_item_extended>();
+                }
+
+                Random rand = new Random();
+                int howManyToGenerate = 100000; 
+
+                for (int i = 0; i < howManyToGenerate; i++)
+                {
+                    string outfit = GetRandomOrEmpty(avatar_parcer.outfitItems, rand);
+                    string swatch = GetRandomOrEmpty(avatar_parcer.avatarColorSwatchs, rand);
+                    string mask = GetRandomOrEmpty(avatar_parcer.avatarMasks, rand);
+                    string decal = GetRandomOrEmpty(avatar_parcer.avatarDecals, rand);
+
+                    var newItem = new avatar_parcer.avatar_item_extended
+                    {
+                        AvatarItemDesc = $"{outfit},{swatch},{mask},{decal}",
+                        UnlockedLevel = 0,
+                        PlatformMask = -1,
+                        Tooltip = "",
+                        Rarity = 0,
+                        FriendlyName = "Randomized Item " + (randomizedItems.Count + 1)
+                    };
+
+                    randomizedItems.Add(newItem);
+                }
+
+                File.WriteAllText(newFilePath, JsonConvert.SerializeObject(randomizedItems, Formatting.Indented));
+                MessageBox.Show($"{howManyToGenerate} randomized items saved to:\n{newFilePath}");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex.Message);
+            }
+        }
+
+        private string GetRandomOrEmpty(List<string> list, Random rand)
+        {
+            if (list == null || list.Count == 0) return "";
+
+            int startIndex = list[0] == "" ? 1 : 0;
+
+            if (list.Count <= startIndex) return ""; 
+
+            int idx = rand.Next(startIndex, list.Count);
+            return list[idx];
+        }
+
+
     }
 }

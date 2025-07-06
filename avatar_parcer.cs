@@ -51,17 +51,17 @@ namespace avatar_toolset
                 {
                     outfitItems.Add(item.outfitItem);
                 }
-                if (!avatarColorSwatchs.Contains(item.avatarDecal))
+                if (!avatarColorSwatchs.Contains(item.avatarColorSwatch))
                 {
-                    avatarColorSwatchs.Add(item.avatarDecal);
+                    avatarColorSwatchs.Add(item.avatarColorSwatch);
                 }
-                if (!avatarMasks.Contains(item.avatarColorSwatch))
+                if (!avatarMasks.Contains(item.avatarMask))
                 {
-                    avatarMasks.Add(item.avatarColorSwatch);
+                    avatarMasks.Add(item.avatarMask);
                 }
-                if (!avatarDecals.Contains(item.avatarMask))
+                if (!avatarDecals.Contains(item.avatarDecal))
                 {
-                    avatarDecals.Add(item.avatarMask);
+                    avatarDecals.Add(item.avatarDecal);
                 }
             }
             Form1.main_ui.comboBox1.Items.AddRange(outfitItems.ToArray());
@@ -87,6 +87,16 @@ namespace avatar_toolset
             public string avatarMask { get; set; }
             public string avatarDecal { get; set; }
         }
+        public class avatar_item_extended : avatar_item
+        {
+            public string AvatarItemDesc { get; set; }
+            public int UnlockedLevel { get; set; }
+            public int PlatformMask { get; set; }
+            public string Tooltip { get; set; }
+            public int Rarity { get; set; }
+            public string FriendlyName { get; set; }
+        }
+
         public static OutfitSelection FromRecNetString(string avatarItemDesc)
         {
             if (string.IsNullOrEmpty(avatarItemDesc))
