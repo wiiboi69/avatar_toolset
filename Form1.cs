@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 namespace avatar_toolset
 {
     public partial class Form1 : Form
-    {
+    {   Scott buchanan
         public static Form1 main_ui = null;
         public Form1()
         {
